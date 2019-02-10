@@ -75,12 +75,11 @@ public final class Main {
     public JsonObject config;
     public JsonElement streamConfig;
   }
-
   public static int team;
   public static boolean server;
   public static List<CameraConfig> cameraConfigs = new ArrayList<>();
 
-  private Main() {
+  public Main() {
   }
 
   /**
