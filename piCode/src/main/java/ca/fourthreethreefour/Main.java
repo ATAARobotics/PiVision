@@ -29,6 +29,7 @@ import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
 /*
    JSON format:
@@ -240,10 +241,24 @@ public final class Main {
     }
 
     // start image processing on camera 0 if present
+
+    VisionAlignment visionAlignment =  new VisionAlignment();
+
     if (cameras.size() >= 1) {
       VisionThread visionThread = new VisionThread(cameras.get(0),
               new MyPipeline(), pipeline -> {
         // do something with pipeline results
+        
+        Mat source = new Mat();
+        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        
+        double turn = visionAlignment.alignValues(visionTargets);
+
+        //TODO Add Network Tables values
+
+        //TODO Remove after debugging
+        visionAlignment.updateVideo(visionTargets, source);
+
       });
       /* something like this for GRIP:
       VisionThread visionThread = new VisionThread(cameras.get(0),
