@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.fourthreethreefour.MyPipeline;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -29,6 +31,7 @@ import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
 /*
    JSON format:
@@ -230,7 +233,8 @@ public final class Main {
       ntinst.startServer();
     } else {
       System.out.println("Setting up NetworkTables client for team " + team);
-      ntinst.startClientTeam(team);
+      //ntinst.startClientTeam(team);
+      ntinst.startClient("roboRIO-4334-FRC.local");
     }
 
     // start cameras
@@ -240,10 +244,22 @@ public final class Main {
     }
 
     // start image processing on camera 0 if present
+
+    VisionAlignment visionAlignment =  new VisionAlignment();
+    EasyTables easyTable = new EasyTables();
+
     if (cameras.size() >= 1) {
       VisionThread visionThread = new VisionThread(cameras.get(0),
               new MyPipeline(), pipeline -> {
         // do something with pipeline results
+        
+        Mat source = new Mat();
+        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        
+        double turn = visionAlignment.alignValues(visionTargets);     
+        System.out.println(turn);
+        easyTable.updateDirection(ntinst, turn);
+        
       });
       /* something like this for GRIP:
       VisionThread visionThread = new VisionThread(cameras.get(0),
