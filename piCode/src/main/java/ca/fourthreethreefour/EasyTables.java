@@ -16,16 +16,18 @@ public class EasyTables {
 
     }
 
-    //NetworkTableEntry DRIVE_ENTRY;
 
     ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
     NetworkTableEntry DRIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Value", 0).getEntry();
+    NetworkTableEntry SPEED_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Speed", 0).getEntry();
 
-    public void updateDirection(NetworkTableInstance ntinst, Double drive){
-        //NetworkTable table = ntinst.getTable("datatable");
-        //DRIVE_ENTRY.setDouble(drive);
+    public void updateDirection(Double drive){
         DRIVE_ENTRY_SHUFFLE.setDouble(drive);
 
+    }
+
+    public void updateSpeed(Double speed){
+        SPEED_ENTRY_SHUFFLE.setDouble(speed);
     }
     
 }

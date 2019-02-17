@@ -245,8 +245,8 @@ public final class Main {
 
     // start image processing on camera 0 if present
 
-    VisionAlignment visionAlignment =  new VisionAlignment();
-    EasyTables easyTable = new EasyTables();
+    final EasyTables easyTable = new EasyTables();
+    final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
     if (cameras.size() >= 1) {
       VisionThread visionThread = new VisionThread(cameras.get(0),
@@ -258,7 +258,7 @@ public final class Main {
         
         double turn = visionAlignment.alignValues(visionTargets);     
         System.out.println(turn);
-        easyTable.updateDirection(ntinst, turn);
+        easyTable.updateDirection(turn);
         
       });
       /* something like this for GRIP:
