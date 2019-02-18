@@ -248,8 +248,7 @@ public final class Main {
     final EasyTables easyTable = new EasyTables();
     final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
-    if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0),
+    VisionThread visionThread = new VisionThread(cameras.get(0),
               new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
@@ -261,22 +260,33 @@ public final class Main {
         easyTable.updateDirection(turn);
         
       });
-      /* something like this for GRIP:
-      VisionThread visionThread = new VisionThread(cameras.get(0),
-              new GripPipeline(), pipeline -> {
-        ...
-      });
-       */
+
+    if (cameras.size() >= 1) {
       visionThread.start();
     }
 
     // loop forever
+
+    Boolean active = easyTable.isVisionActive();
+    Boolean oldState = active;
+
     for (;;) {
       try {
         Thread.sleep(10000);
       } catch (InterruptedException ex) {
         return;
       }
+      active = easyTable.isVisionActive();
+
+      if(active != oldState){
+        if(active){
+          visionThread.notify();
+        } else {
+          visionThread.interrupt();
+        }
+      }
+
+      oldState = active;
     }
   }
 }
