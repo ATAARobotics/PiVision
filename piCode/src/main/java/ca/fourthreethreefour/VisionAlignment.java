@@ -131,6 +131,6 @@ public class VisionAlignment {
 
         }
         //Return decreased turn value.
-        return(turn/200);
+        return(turn/160);
     }
 }
