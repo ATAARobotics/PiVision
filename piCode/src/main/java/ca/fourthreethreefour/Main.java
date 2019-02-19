@@ -278,11 +278,11 @@ public final class Main {
     Boolean oldState = active;
 
     for (;;) {
-      try {
+      /*try {
         Thread.sleep(10000);
       } catch (InterruptedException ex) {
         return;
-      }
+      }*/
       active = easyTable.isVisionActive();
 
       if(active != oldState){
