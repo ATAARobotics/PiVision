@@ -2,7 +2,6 @@ package ca.fourthreethreefour;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -13,7 +12,6 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 
 public class VisionAlignment {
