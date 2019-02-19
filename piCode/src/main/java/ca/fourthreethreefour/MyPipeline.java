@@ -74,7 +74,7 @@ public class MyPipeline implements VisionPipeline {
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 0.0;
 		double filterContoursMinPerimeter = 20.0;
-		double filterContoursMinWidth = 10.0;
+		double filterContoursMinWidth = 5.0;
 		double filterContoursMaxWidth = 1000.0;
 		double filterContoursMinHeight = 30.0;
 		double filterContoursMaxHeight = 1000.0;

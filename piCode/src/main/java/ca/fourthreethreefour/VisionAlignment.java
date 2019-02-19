@@ -13,9 +13,10 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 
-public class VisionAlignment{
+public class VisionAlignment {
 
     //Declare vision Variables
     private static final int IMG_WIDTH = 320;
@@ -25,6 +26,8 @@ public class VisionAlignment{
     private final Object imgLock = new Object();
     private Rect[] visionTarget = new Rect[2];
 
+    EasyTables easyTables;
+
 
         
     CvSink cvSink = CameraServer.getInstance().getVideo();
@@ -32,11 +35,9 @@ public class VisionAlignment{
         //TODO Remove once feedback is not required
     CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
 
-    public VisionAlignment(){
+    public VisionAlignment(EasyTables easyTables){
+        this.easyTables = easyTables;
     }
-
-    //TODO Test if necessary to add line to process code
-    
 
     //Declare Variables for process function
     Rect placeHolder = new Rect(0,0,1,1);
@@ -83,7 +84,7 @@ public class VisionAlignment{
                         visionTarget[0] = rectList.get(i);
                         largestIndex = i;
                     }
-                    //If the current rectangle is larger thanm the second largest
+                    //If the current rectangle is larger than the second largest
                     else if(rectList.get(secondIndex).area()<rectList.get(i).area()){
                         visionTarget[1] = rectList.get(i);
                         secondIndex = i;
@@ -105,7 +106,7 @@ public class VisionAlignment{
         return(visionTarget);
     }
 
-    public void updateVideo(Rect[] visionTargets, Mat source){
+    public void updateVideo(Rect[] visionTarget, Mat source){
         //Draws Rectangle
         Imgproc.rectangle(source, new Point(visionTarget[0].x, visionTarget[0].y), new Point(visionTarget[0].x + visionTarget[0].width, visionTarget[0].y + visionTarget[0].height), new Scalar(0,0,255), 2);
         Imgproc.rectangle(source, new Point(visionTarget[1].x, visionTarget[1].y), new Point(visionTarget[1].x + visionTarget[1].width, visionTarget[1].y + visionTarget[1].height), new Scalar(0,0,255), 2);
@@ -115,17 +116,21 @@ public class VisionAlignment{
 
     }
 
-    public double alignValues(Rect[] visionTargets){
+    //Determine motor movements from location of vision targets
+    public double alignValues(Rect[] visionTarget){
         double centerX;
         double turn = 0;
         synchronized (imgLock) {
-            centerX = visionTarget[0].x + (visionTarget[0].width / 2);
-        }
 
-        if(visionTarget[0].x != visionTarget[1].x){
-            turn = centerX - (IMG_WIDTH/2);
-        }
+            if(visionTarget[0].x != visionTarget[0].x){
+                centerX = (visionTarget[0].x + visionTarget[1].x)/2;
+                turn = centerX - (IMG_WIDTH/2);
+            } else {
+                turn = 0;
+            }
 
-        return(turn);
+        }
+        //Return decreased turn value.
+        return(turn/160);
     }
 }
