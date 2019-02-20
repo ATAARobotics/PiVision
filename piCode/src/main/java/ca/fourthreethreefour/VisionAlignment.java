@@ -8,7 +8,6 @@ import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -22,10 +21,8 @@ public class VisionAlignment{
     
     private final Object imgLock = new Object();
     
-    CvSink cvSink = CameraServer.getInstance().getVideo();
-    
     //TODO Remove once feedback is not required
-    CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
+    private static CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
     
     public RotatedRect[] findTargets(MyPipeline pipeline, Mat source){
         pipeline.process(source);
