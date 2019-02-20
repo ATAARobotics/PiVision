@@ -267,26 +267,13 @@ public final class Main {
 
     // loop forever
 
-    Boolean active = easyTable.isVisionActive();
-    Boolean oldState = active;
-
     for (;;) {
-      /*try {
+      try {
         Thread.sleep(10000);
       } catch (InterruptedException ex) {
         return;
-      }*/
-      active = easyTable.isVisionActive();
-
-      if(active != oldState){
-        if(active){
-          visionThread.notify();
-        } else {
-          visionThread.interrupt();
-        }
       }
 
-      oldState = active;
     }
   }
 }
