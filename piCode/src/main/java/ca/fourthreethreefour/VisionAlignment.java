@@ -18,8 +18,7 @@ public class VisionAlignment{
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 240;
     private static final int FOV = 60;
-    
-    private final Object imgLock = new Object();
+    private static final double FOCAL_LENGTH = IMG_WIDTH/(2*Math.tan(FOV/2));
     
     //TODO Remove once feedback is not required
     private static CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
@@ -60,11 +59,6 @@ public class VisionAlignment{
                 visionTarget[1] = currentRectangle;
             }
         }
-        
-        // Synchronizes data to prevent acess to variables
-        synchronized (imgLock) {
-            
-        }
         return visionTarget;
     }
     
@@ -86,27 +80,15 @@ public class VisionAlignment{
     }
     
     public double alignValues(RotatedRect[] visionTargets){
-        double centerX;
-        double centerX2;
-        double finalCenterX;
         double turn = 0;
-        double focalLength;
         double angleToTarget;
-        synchronized (imgLock) {
-            //Calculates CenterX 
-            centerX = visionTargets[0].center.x;
-            centerX2 = visionTargets[1].center.x;
-            finalCenterX = (centerX + centerX2) / 2;
-            //Calculates focalLength of camera
-            focalLength = IMG_WIDTH/(2*Math.tan(FOV/2));
-            
-        }
-        
+        double finalCenterX;
         if(visionTargets.length == 2){
-            //TODO add proper turning calcs 
+            finalCenterX = (visionTargets[0].center.x + visionTargets[1].center.x) / 2;
             
+            //TODO add proper turning calcs 
             //Calculates angle to the target
-            angleToTarget = Math.atan((finalCenterX - 159.5) / focalLength);
+            angleToTarget = Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH);
             System.out.print(angleToTarget);
             
             
@@ -117,6 +99,7 @@ public class VisionAlignment{
             The ideal is making angleToTarget equal to 0 
             (Note: Above calculations are not tested and I may have misinterpreted how to do them)
             */
+            return(turn);
         }
         
         return(turn);
