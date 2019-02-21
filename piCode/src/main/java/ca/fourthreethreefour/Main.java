@@ -22,16 +22,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 
 /*
    JSON format:
@@ -81,9 +81,6 @@ public final class Main {
   public static int team;
   public static boolean server;
   public static List<CameraConfig> cameraConfigs = new ArrayList<>();
-
-  public Main() {
-  }
 
   /**
    * Report parse error.
@@ -201,7 +198,7 @@ public final class Main {
     return camera;
   }
 
-  /**
+  /*
    * Example pipeline.
    */
   /*public static class MyPipeline implements VisionPipeline {
@@ -213,10 +210,8 @@ public final class Main {
     }
   }
   */
-  /**
-   * Main.
-   */
   public static void main(String... args) {
+    
     if (args.length > 0) {
       configFile = args[0];
     }
@@ -247,14 +242,15 @@ public final class Main {
 
     VisionAlignment visionAlignment =  new VisionAlignment();
     EasyTables easyTable = new EasyTables();
+    CvSink sink = CameraServer.getInstance().getVideo();
 
     if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
+      VisionThread visionThread = new VisionThread(cameras.get(0), new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
         Mat source = new Mat();
-        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        sink.grabFrame(source);
+        RotatedRect[] visionTargets = visionAlignment.findTargets(pipeline, source);
         
         double turn = visionAlignment.alignValues(visionTargets);     
         System.out.println(turn);
