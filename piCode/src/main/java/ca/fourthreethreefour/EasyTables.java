@@ -11,15 +11,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
 public class EasyTables {
-
-    EasyTables(){
-
-    }
-
     //NetworkTableEntry DRIVE_ENTRY;
 
-    ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
-    NetworkTableEntry DRIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Value", 0).getEntry();
+    static ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
+    static NetworkTableEntry DRIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Value", 0).getEntry();
 
     public void updateDirection(NetworkTableInstance ntinst, Double drive){
         //NetworkTable table = ntinst.getTable("datatable");
