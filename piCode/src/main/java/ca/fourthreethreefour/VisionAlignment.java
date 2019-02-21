@@ -24,7 +24,6 @@ public class VisionAlignment{
     private static CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
     
     public RotatedRect[] findTargets(MyPipeline pipeline, Mat source){
-        pipeline.process(source);
         RotatedRect[] visionTarget = {new RotatedRect(), new RotatedRect()};
         
         if (pipeline.filterContoursOutput().size() < 2) {
@@ -79,6 +78,7 @@ public class VisionAlignment{
         
     }
     
+    //TODO Finish math formula
     public double alignValues(RotatedRect[] visionTargets){
         double turn = 0;
         double angleToTarget;
