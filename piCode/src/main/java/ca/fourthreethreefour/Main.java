@@ -71,6 +71,10 @@ import org.opencv.core.RotatedRect;
 public final class Main {
   private static String configFile = "/boot/frc.json";
 
+  public static int team;
+  public static boolean isSelfServer;
+  public static List<CameraConfig> cameraConfigs = new ArrayList<>();
+
   @SuppressWarnings("MemberName")
   public static class CameraConfig {
     public String name;
@@ -78,9 +82,6 @@ public final class Main {
     public JsonObject config;
     public JsonElement streamConfig;
   }
-  public static int team;
-  public static boolean server;
-  public static List<CameraConfig> cameraConfigs = new ArrayList<>();
 
   /**
    * Report parse error.
@@ -153,9 +154,9 @@ public final class Main {
     if (obj.has("ntmode")) {
       String str = obj.get("ntmode").getAsString();
       if ("client".equalsIgnoreCase(str)) {
-        server = false;
+        isSelfServer = false;
       } else if ("server".equalsIgnoreCase(str)) {
-        server = true;
+        isSelfServer = true;
       } else {
         parseError("could not understand ntmode value '" + str + "'");
       }
@@ -197,19 +198,7 @@ public final class Main {
 
     return camera;
   }
-
-  /*
-   * Example pipeline.
-   */
-  /*public static class MyPipeline implements VisionPipeline {
-    public int val;
-
-    @Override
-    public void process(Mat mat) {
-      val += 1;
-    }
-  }
-  */
+  
   public static void main(String... args) {
     
     if (args.length > 0) {
@@ -223,7 +212,7 @@ public final class Main {
 
     // start NetworkTables
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
-    if (server) {
+    if (isSelfServer) {
       System.out.println("Setting up NetworkTables server");
       ntinst.startServer();
     } else {
@@ -257,13 +246,9 @@ public final class Main {
         easyTable.updateDirection(ntinst, turn);
         
       });
-      /* something like this for GRIP:
-      VisionThread visionThread = new VisionThread(cameras.get(0),
-              new GripPipeline(), pipeline -> {
-        ...
-      });
-       */
       visionThread.start();
+    } else{
+      parseError("Could not find camera");
     }
 
     // loop forever
