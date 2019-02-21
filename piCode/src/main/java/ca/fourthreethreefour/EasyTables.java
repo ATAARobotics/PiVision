@@ -23,9 +23,7 @@ public class EasyTables {
 
     public void updateDirection(NetworkTableInstance ntinst, Double drive){
         //NetworkTable table = ntinst.getTable("datatable");
-        //DRIVE_ENTRY.setDouble(drive);
         DRIVE_ENTRY_SHUFFLE.setDouble(drive);
-
     }
     
 }
