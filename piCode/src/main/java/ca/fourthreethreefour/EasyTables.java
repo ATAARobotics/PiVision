@@ -16,17 +16,14 @@ public class EasyTables {
 
     EasyTables(NetworkTableInstance inst){
         this.inst = inst;
+        NetworkTable table = inst.getTable("datatable");
+        VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
     }
 
 
     ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
     NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
     NetworkTableEntry VISION_DRIVE_VALUE;
-
-    public void init(){
-        NetworkTable table = inst.getTable("datatable");
-        VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
-    }
 
     public void updateDirection(Double drive){
         VISION_DRIVE_VALUE.setDouble(drive);

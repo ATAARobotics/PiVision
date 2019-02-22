@@ -246,7 +246,6 @@ public final class Main {
     // start image processing on camera 0 if present
 
     final EasyTables easyTable = new EasyTables(ntinst);
-    easyTable.init();
     final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
     VisionThread visionThread = new VisionThread(cameras.get(0),
