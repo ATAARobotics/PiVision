@@ -2,7 +2,6 @@ package ca.fourthreethreefour;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;

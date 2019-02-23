@@ -1,10 +1,13 @@
 package ca.fourthreethreefour;
 
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.cscore.VideoSource;
+
 
 public class EasyTables {
 
@@ -16,12 +19,10 @@ public class EasyTables {
         VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
     }
 
-
     ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
   
     NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
     NetworkTableEntry VISION_DRIVE_VALUE;
-
 
     public void updateDirection(Double drive){
         VISION_DRIVE_VALUE.setDouble(drive);
@@ -31,6 +32,10 @@ public class EasyTables {
 
     public boolean isVisionActive(){
         return(VISION_ACTIVE_ENTRY_SHUFFLE.getBoolean(false));
+    }
+
+    public void startDriverCamera(VideoSource camera){
+        dashboardTab.add(camera);
     }
 
     
