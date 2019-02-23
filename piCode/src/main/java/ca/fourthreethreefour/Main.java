@@ -253,17 +253,19 @@ public final class Main {
 
     // start image processing on camera 0 if present
 
+
+
+    final EasyTables easyTable = new EasyTables(ntinst);
+
     final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
-    VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
+    VisionThread visionThread = new VisionThread(cameras.get(0), new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
-        Mat source = new Mat();
-        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        Rect[] visionTargets = visionAlignment.process(pipeline);
         
         double turn = visionAlignment.alignValues(visionTargets);     
-        System.out.println(turn);
+        //System.out.println(turn);
         easyTable.updateDirection(turn);
         
       });
@@ -274,26 +276,16 @@ public final class Main {
 
     // loop forever
 
-    Boolean active = easyTable.isVisionActive();
-    Boolean oldState = active;
-
     for (;;) {
-      /*try {
+      try {
         Thread.sleep(10000);
       } catch (InterruptedException ex) {
         return;
-      }*/
-      active = easyTable.isVisionActive();
 
-      if(active != oldState){
-        if(active){
-          visionThread.notify();
-        } else {
-          visionThread.interrupt();
-        }
       }
 
-      oldState = active;
+      }
+
     }
   }
 }

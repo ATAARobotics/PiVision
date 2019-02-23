@@ -30,8 +30,6 @@ public class VisionAlignment {
         
     CvSink cvSink = CameraServer.getInstance().getVideo();
         
-        //TODO Remove once feedback is not required
-    CvSource outputStream = CameraServer.getInstance().putVideo("Image Analysis", IMG_WIDTH, IMG_HEIGHT);
 
     public VisionAlignment(EasyTables easyTables){
         this.easyTables = easyTables;
@@ -42,12 +40,13 @@ public class VisionAlignment {
     int largestIndex = 0;
     int secondIndex = 0;
 
-    public Rect[] process(MyPipeline pipeline, Mat source){
-
-        cvSink.grabFrame(source);
+    public Rect[] process(MyPipeline pipeline){
 
         visionTarget[0] = placeHolder;
         visionTarget[1] = placeHolder;
+
+        largestIndex = 0;
+        secondIndex = 0;
 
         if(!pipeline.filterContoursOutput().isEmpty()){
 
@@ -102,16 +101,6 @@ public class VisionAlignment {
         }
         
         return(visionTarget);
-    }
-
-    public void updateVideo(Rect[] visionTarget, Mat source){
-        //Draws Rectangle
-        Imgproc.rectangle(source, new Point(visionTarget[0].x, visionTarget[0].y), new Point(visionTarget[0].x + visionTarget[0].width, visionTarget[0].y + visionTarget[0].height), new Scalar(0,0,255), 2);
-        Imgproc.rectangle(source, new Point(visionTarget[1].x, visionTarget[1].y), new Point(visionTarget[1].x + visionTarget[1].width, visionTarget[1].y + visionTarget[1].height), new Scalar(0,0,255), 2);
-        
-        //Send Frame
-        outputStream.putFrame(source);
-
     }
 
     //Determine motor movements from location of vision targets

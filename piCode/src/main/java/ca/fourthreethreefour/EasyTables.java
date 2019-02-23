@@ -1,33 +1,34 @@
 package ca.fourthreethreefour;
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.cscore.VideoSource;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.cscore.VideoSource;
 
 
 public class EasyTables {
 
-    EasyTables(){
+    NetworkTableInstance inst;
 
+    EasyTables(NetworkTableInstance inst){
+        this.inst = inst;
+        NetworkTable table = inst.getTable("datatable");
+        VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
     }
 
-    private ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dashboard");
-    private ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
-    private NetworkTableEntry DRIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Value", 0).getEntry();
-    private NetworkTableEntry SPEED_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Speed", 0).getEntry();
-    private NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
+  
+    NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    NetworkTableEntry VISION_DRIVE_VALUE;
 
     public void updateDirection(Double drive){
-        DRIVE_ENTRY_SHUFFLE.setDouble(drive);
+        VISION_DRIVE_VALUE.setDouble(drive);
  
     }
 
-    public void updateSpeed(Double speed){
-        SPEED_ENTRY_SHUFFLE.setDouble(speed);
-    }
 
     public boolean isVisionActive(){
         return(VISION_ACTIVE_ENTRY_SHUFFLE.getBoolean(false));
@@ -36,5 +37,6 @@ public class EasyTables {
     public void startDriverCamera(VideoSource camera){
         dashboardTab.add(camera);
     }
+
     
 }
