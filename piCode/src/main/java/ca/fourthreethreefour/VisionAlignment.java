@@ -19,6 +19,8 @@ public class VisionAlignment {
     //Declare vision Variables
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 240;
+    private static final int FOV = 60;
+    private static final double FOCAL_LENGTH = IMG_WIDTH/(2*Math.tan(FOV/2));
     
     private List<Rect> rectList = new LinkedList<Rect>();
     private final Object imgLock = new Object();
@@ -104,20 +106,33 @@ public class VisionAlignment {
     }
 
     //Determine motor movements from location of vision targets
-    public double alignValues(Rect[] visionTarget){
-        double centerX;
+    public double alignValues(Rect[] visionTargets){
         double turn = 0;
-        synchronized (imgLock) {
-
-            if(visionTarget[0].x != visionTarget[0].x){
-                centerX = (visionTarget[0].x + visionTarget[1].x)/2;
-                turn = centerX - (IMG_WIDTH/2);
-            } else {
-                turn = 0;
-            }
-
+        double angleToTarget;
+        double centerX;
+        double centerX2;
+        double finalCenterX;
+        if(visionTargets.length == 2){
+            centerX = visionTarget[0].x + (visionTarget[0].width / 2); 
+            centerX2 = visionTarget[1].x + (visionTarget[1].width / 2); 
+            finalCenterX = (centerX + centerX2) / 2;
+            
+            //TODO add proper turning calcs 
+            //Calculates angle to the target
+            angleToTarget = Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH);
+            System.out.print(angleToTarget);
+            
+            
+            /*TODO: Use encoder values to turn with the angle
+            We can use encoder.getSelectedSensorPosition? and divide by 3 000 000? to get cm
+            Then we can tell the encoder to move x cm depending on the angle
+            (This will require a lot of testing and trial/error)
+            The ideal is making angleToTarget equal to 0 
+            (Note: Above calculations are not tested and I may have misinterpreted how to do them)
+            */
+            return(turn);
         }
-        //Return decreased turn value.
-        return(turn/160);
+        
+        return(turn);
     }
 }
