@@ -239,21 +239,6 @@ public final class Main {
       cameras.add(startCamera(cameraConfig));
     }
 
-    final EasyTables easyTable = new EasyTables();
-
-    //Starts Video Stream on camera 1 if present
-
-    if(cameras.size() >= 2){
-      easyTable.startDriverCamera(cameras.get(1));
-      System.out.println("Starting driver video stream using camera1");
-    } else {
-      System.out.println("No secondary camera detected for driver stream");
-    }
-
-
-    // start image processing on camera 0 if present
-
-
 
     final EasyTables easyTable = new EasyTables(ntinst);
 
@@ -288,4 +273,4 @@ public final class Main {
 
     }
   }
-}
+

@@ -33,10 +33,5 @@ public class EasyTables {
     public boolean isVisionActive(){
         return(VISION_ACTIVE_ENTRY_SHUFFLE.getBoolean(false));
     }
-
-    public void startDriverCamera(VideoSource camera){
-        dashboardTab.add(camera);
-    }
-
     
 }
