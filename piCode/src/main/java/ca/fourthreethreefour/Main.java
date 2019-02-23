@@ -248,15 +248,13 @@ public final class Main {
     final EasyTables easyTable = new EasyTables(ntinst);
     final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
-    VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
+    VisionThread visionThread = new VisionThread(cameras.get(0), new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
-        Mat source = new Mat();
-        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        Rect[] visionTargets = visionAlignment.process(pipeline);
         
         double turn = visionAlignment.alignValues(visionTargets);     
-        System.out.println(turn);
+        //System.out.println(turn);
         easyTable.updateDirection(turn);
         
       });
