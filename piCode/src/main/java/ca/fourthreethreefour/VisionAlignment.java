@@ -107,8 +107,7 @@ public class VisionAlignment {
 
     //Determine motor movements from location of vision targets
     public double alignValues(Rect[] visionTargets){
-        double turn = 0;
-        double angleToTarget;
+        double angleToTarget = 0;
         double centerX;
         double centerX2;
         double finalCenterX;
@@ -130,9 +129,8 @@ public class VisionAlignment {
             The ideal is making angleToTarget equal to 0 
             (Note: Above calculations are not tested and I may have misinterpreted how to do them)
             */
-            return(turn);
         }
         
-        return(turn);
+        return(angleToTarget);
     }
 }
