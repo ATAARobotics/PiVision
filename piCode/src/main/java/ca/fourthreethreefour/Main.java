@@ -29,44 +29,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.vision.VisionThread;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-
-
-/*
-   JSON format:
-   {
-       "team": <team number>,
-       "ntmode": <"client" or "server", "client" if unspecified>
-       "cameras": [
-           {
-               "name": <camera name>
-               "path": <path, e.g. "/dev/video0">
-               "pixel format": <"MJPEG", "YUYV", etc>   // optional
-               "width": <video mode width>              // optional
-               "height": <video mode height>            // optional
-               "fps": <video mode fps>                  // optional
-               "brightness": <percentage brightness>    // optional
-               "white balance": <"auto", "hold", value> // optional
-               "exposure": <"auto", "hold", value>      // optional
-               "properties": [                          // optional
-                   {
-                       "name": <property name>
-                       "value": <property value>
-                   }
-               ],
-               "stream": {                              // optional
-                   "properties": [
-                       {
-                           "name": <stream property name>
-                           "value": <stream property value>
-                       }
-                   ]
-               }
-           }
-       ]
-   }
- */
+import org.opencv.core.RotatedRect;
 
 public final class Main {
   private static String configFile = "/boot/frc.json";
@@ -242,17 +205,16 @@ public final class Main {
 
     final EasyTables easyTable = new EasyTables(ntinst);
 
-    final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
+    final VisionAlignment visionAlignment =  new VisionAlignment();
 
     VisionThread visionThread = new VisionThread(cameras.get(0), new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
-        Rect[] visionTargets = visionAlignment.process(pipeline);
+        RotatedRect[] visionTargets = visionAlignment.process(pipeline);
         
-        double turn = visionAlignment.alignValues(visionTargets);     
-        //System.out.println(turn);
+        double turn = visionAlignment.alignValues(visionTargets);
+
         easyTable.updateDirection(turn);
-        
       });
 
     if (cameras.size() >= 1) {
@@ -260,7 +222,6 @@ public final class Main {
     }
 
     // loop forever
-
     for (;;) {
       try {
         Thread.sleep(10000);
