@@ -66,12 +66,15 @@ public class VisionAlignment {
             if(rectList.size() == 1){
                 visionTarget[0] = rectList.get(0);
                 visionTarget[1] = visionTarget[0];
+                easyTables.setNoTargetError(true);
 
             } else if(rectList.size() == 2){
                 visionTarget[0] = rectList.get(0);
                 visionTarget[1] = rectList.get(1);
+                easyTables.setNoTargetError(false);
 
             } else if(rectList.size() > 2){
+                easyTables.setNoTargetError(false);
                 //Detect and set two largest rectangles to variable
                 for (int i = 1; i < rectList.size();i++){
                     //If the current rectangle is larger than our largest
@@ -95,6 +98,7 @@ public class VisionAlignment {
             
         } else {
             System.out.println("No Contours Detected");
+            easyTables.setNoTargetError(true);
         }
 
         synchronized(imgLock){
