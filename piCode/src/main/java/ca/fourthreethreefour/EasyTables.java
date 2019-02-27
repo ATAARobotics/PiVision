@@ -11,7 +11,7 @@ import edu.wpi.cscore.VideoSource;
 
 public class EasyTables {
 
-    NetworkTableInstance inst;
+    private NetworkTableInstance inst;
 
     EasyTables(NetworkTableInstance inst){
         this.inst = inst;
@@ -20,11 +20,11 @@ public class EasyTables {
         VISION_ERROR_NOTARGET = table.getEntry("VISION_ERROR_NOTARGET");
     }
 
-    ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
+    private ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
   
-    NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
-    NetworkTableEntry VISION_DRIVE_VALUE;
-    NetworkTableEntry VISION_ERROR_NOTARGET;
+    private NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    private NetworkTableEntry VISION_DRIVE_VALUE;
+    private NetworkTableEntry VISION_ERROR_NOTARGET;
 
     public void updateDirection(Double drive){
         VISION_DRIVE_VALUE.setDouble(drive);

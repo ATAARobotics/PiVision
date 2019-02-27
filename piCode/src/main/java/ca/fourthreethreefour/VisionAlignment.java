@@ -24,7 +24,7 @@ public class VisionAlignment {
     private final Object imgLock = new Object();
     private Rect[] visionTarget = new Rect[2];
 
-    EasyTables easyTables;
+    private EasyTables easyTables;
 
 
         
