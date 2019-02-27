@@ -3,14 +3,10 @@ package ca.fourthreethreefour;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
 import edu.wpi.first.cameraserver.CameraServer;
 
 
