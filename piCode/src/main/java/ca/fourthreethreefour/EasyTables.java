@@ -10,18 +10,20 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class EasyTables {
 
-    NetworkTableInstance inst;
+    private NetworkTableInstance inst;
 
     EasyTables(NetworkTableInstance inst){
         this.inst = inst;
         NetworkTable table = inst.getTable("datatable");
         VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
+        VISION_ERROR_NOTARGET = table.getEntry("VISION_ERROR_NOTARGET");
     }
 
-    ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
+    private ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
   
-    NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
-    NetworkTableEntry VISION_DRIVE_VALUE;
+    private NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    private NetworkTableEntry VISION_DRIVE_VALUE;
+    private NetworkTableEntry VISION_ERROR_NOTARGET;
 
     public void updateDirection(Double drive){
         VISION_DRIVE_VALUE.setDouble(drive);
@@ -31,6 +33,10 @@ public class EasyTables {
 
     public boolean isVisionActive(){
         return(VISION_ACTIVE_ENTRY_SHUFFLE.getBoolean(false));
+    }
+
+    public void setNoTargetError(Boolean errorTrue){
+        VISION_ERROR_NOTARGET.setBoolean(errorTrue);
     }
     
 }
