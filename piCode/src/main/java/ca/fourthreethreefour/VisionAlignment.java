@@ -16,7 +16,7 @@ public class VisionAlignment {
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 240;
     private static final int FOV = 60;
-    private static final double FOCAL_LENGTH = IMG_WIDTH/(2*Math.tan(FOV/2));
+    private static final double FOCAL_LENGTH = IMG_WIDTH/(2*Math.tan(Math.toRadians(FOV/2)));
     
     private List<Rect> rectList = new LinkedList<Rect>();
     private final Object imgLock = new Object();
@@ -118,17 +118,10 @@ public class VisionAlignment {
             
             //TODO add proper turning calcs 
             //Calculates angle to the target
-            angleToTarget = Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH);
+            angleToTarget = Math.toDegrees(Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH));
             System.out.print(angleToTarget);
             
             
-            /*TODO: Use encoder values to turn with the angle
-            We can use encoder.getSelectedSensorPosition? and divide by 3 000 000? to get cm
-            Then we can tell the encoder to move x cm depending on the angle
-            (This will require a lot of testing and trial/error)
-            The ideal is making angleToTarget equal to 0 
-            (Note: Above calculations are not tested and I may have misinterpreted how to do them)
-            */
         }
         
         return(angleToTarget);
