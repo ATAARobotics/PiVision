@@ -116,7 +116,6 @@ public class VisionAlignment {
             centerX2 = visionTarget[1].x + (visionTarget[1].width / 2); 
             finalCenterX = (centerX + centerX2) / 2;
             
-            //TODO add proper turning calcs 
             //Calculates angle to the target
             angleToTarget = Math.toDegrees(Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH));
             System.out.print(angleToTarget);
