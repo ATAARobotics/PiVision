@@ -74,17 +74,18 @@ public class VisionAlignment {
                 visionTarget[1] = rectList.get(1);
 
             } else if(rectList.size() > 2){
-                //Detect and set two largest rectangles to variable
+                //Detect two rectangles closet to center of screen
                 for (int i = 1; i < rectList.size();i++){
-                    //If the current rectangle is larger than our largest
-                    if(rectList.get(largestIndex).area()<rectList.get(i).area()){
+                    //If the current rectangle is closer than our closest
+                    if(Math.abs(rectList.get(largestIndex).x-160)>Math.abs(rectList.get(i).x-160)){
                         visionTarget[1] = visionTarget[0];
                         secondIndex = largestIndex;
                         visionTarget[0] = rectList.get(i);
                         largestIndex = i;
+                        
                     }
-                    //If the current rectangle is larger than the second largest
-                    else if(rectList.get(secondIndex).area()<rectList.get(i).area()){
+                    //If the current rectangle is closer than the second closest
+                    else if(Math.abs(rectList.get(secondIndex).x-160)<Math.abs(rectList.get(i).x-160)){
                         visionTarget[1] = rectList.get(i);
                         secondIndex = i;
                     }
