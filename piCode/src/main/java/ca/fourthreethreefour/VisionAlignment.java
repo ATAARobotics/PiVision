@@ -15,6 +15,8 @@ public class VisionAlignment {
     //Declare vision Variables
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 240;
+    private static final int FOV = 60;
+    private static final double FOCAL_LENGTH = IMG_WIDTH/(2*Math.tan(Math.toRadians(FOV/2)));
     
     private List<Rect> rectList = new LinkedList<Rect>();
     private final Object imgLock = new Object();
@@ -73,15 +75,16 @@ public class VisionAlignment {
                 easyTables.setNoTargetError(false);
                 //Detect and set two largest rectangles to variable
                 for (int i = 1; i < rectList.size();i++){
-                    //If the current rectangle is larger than our largest
-                    if(rectList.get(largestIndex).area()<rectList.get(i).area()){
+                    //If the current rectangle is closer than our closest
+                    if(Math.abs(rectList.get(largestIndex).x-160)>Math.abs(rectList.get(i).x-160)){
                         visionTarget[1] = visionTarget[0];
                         secondIndex = largestIndex;
                         visionTarget[0] = rectList.get(i);
                         largestIndex = i;
+                        
                     }
-                    //If the current rectangle is larger than the second largest
-                    else if(rectList.get(secondIndex).area()<rectList.get(i).area()){
+                    //If the current rectangle is closer than the second closest
+                    else if(Math.abs(rectList.get(secondIndex).x-160)<Math.abs(rectList.get(i).x-160)){
                         visionTarget[1] = rectList.get(i);
                         secondIndex = i;
                     }
@@ -104,20 +107,23 @@ public class VisionAlignment {
     }
 
     //Determine motor movements from location of vision targets
-    public double alignValues(Rect[] visionTarget){
+    public double alignValues(Rect[] visionTargets){
+        double angleToTarget = 0;
         double centerX;
-        double turn = 0;
-        synchronized (imgLock) {
-
-            if(visionTarget[0].x != visionTarget[0].x){
-                centerX = (visionTarget[0].x + visionTarget[1].x)/2;
-                turn = centerX - (IMG_WIDTH/2);
-            } else {
-                turn = 0;
-            }
-
+        double centerX2;
+        double finalCenterX;
+        if(visionTargets.length == 2){
+            centerX = visionTarget[0].x + (visionTarget[0].width / 2); 
+            centerX2 = visionTarget[1].x + (visionTarget[1].width / 2); 
+            finalCenterX = (centerX + centerX2) / 2;
+            
+            //Calculates angle to the target
+            angleToTarget = Math.toDegrees(Math.atan((finalCenterX - 159.5) / FOCAL_LENGTH));
+            System.out.print(angleToTarget);
+            
+            
         }
-        //Return decreased turn value.
-        return(turn);
+        
+        return(angleToTarget);
     }
 }
