@@ -1,38 +1,42 @@
 package ca.fourthreethreefour;
 
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-
-import edu.wpi.first.networktables.NetworkTableEntry;
-
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 public class EasyTables {
 
-    EasyTables(){
+    private NetworkTableInstance inst;
 
+    EasyTables(NetworkTableInstance inst){
+        this.inst = inst;
+        NetworkTable table = inst.getTable("datatable");
+        VISION_DRIVE_VALUE = table.getEntry("VISION_DRIVE_VALUE");
+        VISION_ERROR_NOTARGET = table.getEntry("VISION_ERROR_NOTARGET");
     }
 
-
-    ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
-    NetworkTableEntry DRIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Value", 0).getEntry();
-    NetworkTableEntry SPEED_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Drive Speed", 0).getEntry();
-    NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    private ShuffleboardTab dynamicSettingsTab = Shuffleboard.getTab("Dynamic Settings");
+  
+    private NetworkTableEntry VISION_ACTIVE_ENTRY_SHUFFLE = dynamicSettingsTab.addPersistent("Vision Active", false).getEntry();
+    private NetworkTableEntry VISION_DRIVE_VALUE;
+    private NetworkTableEntry VISION_ERROR_NOTARGET;
 
     public void updateDirection(Double drive){
-        DRIVE_ENTRY_SHUFFLE.setDouble(drive);
+        VISION_DRIVE_VALUE.setDouble(drive);
  
     }
 
-    public void updateSpeed(Double speed){
-        SPEED_ENTRY_SHUFFLE.setDouble(speed);
-    }
 
     public boolean isVisionActive(){
         return(VISION_ACTIVE_ENTRY_SHUFFLE.getBoolean(false));
+    }
+
+    public void setNoTargetError(Boolean errorTrue){
+        VISION_ERROR_NOTARGET.setBoolean(errorTrue);
     }
     
 }

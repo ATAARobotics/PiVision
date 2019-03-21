@@ -27,11 +27,11 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+
 
 /*
    JSON format:
@@ -202,18 +202,6 @@ public final class Main {
   }
 
   /**
-   * Example pipeline.
-   */
-  /*public static class MyPipeline implements VisionPipeline {
-    public int val;
-
-    @Override
-    public void process(Mat mat) {
-      val += 1;
-    }
-  }
-  */
-  /**
    * Main.
    */
   public static void main(String... args) {
@@ -237,26 +225,32 @@ public final class Main {
       ntinst.startClient("roboRIO-4334-FRC.local");
     }
 
+
+    /*
+    Camera Usage:
+    camera0: Vision, Target Detection
+    camera1: Driver Camera - Streamed to Shuffleboard
+    */
+
+
     // start cameras
     List<VideoSource> cameras = new ArrayList<>();
     for (CameraConfig cameraConfig : cameraConfigs) {
       cameras.add(startCamera(cameraConfig));
     }
 
-    // start image processing on camera 0 if present
 
-    final EasyTables easyTable = new EasyTables();
+    final EasyTables easyTable = new EasyTables(ntinst);
+
     final VisionAlignment visionAlignment =  new VisionAlignment(easyTable);
 
-    VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
+    VisionThread visionThread = new VisionThread(cameras.get(0), new MyPipeline(), pipeline -> {
         // do something with pipeline results
         
-        Mat source = new Mat();
-        Rect[] visionTargets = visionAlignment.process(pipeline, source);
+        Rect[] visionTargets = visionAlignment.process(pipeline);
         
         double turn = visionAlignment.alignValues(visionTargets);     
-        System.out.println(turn);
+        //System.out.println(turn);
         easyTable.updateDirection(turn);
         
       });
@@ -267,26 +261,16 @@ public final class Main {
 
     // loop forever
 
-    Boolean active = easyTable.isVisionActive();
-    Boolean oldState = active;
-
     for (;;) {
       try {
         Thread.sleep(10000);
       } catch (InterruptedException ex) {
         return;
-      }
-      active = easyTable.isVisionActive();
 
-      if(active != oldState){
-        if(active){
-          visionThread.notify();
-        } else {
-          visionThread.interrupt();
-        }
       }
 
-      oldState = active;
+      }
+
     }
   }
-}
+
