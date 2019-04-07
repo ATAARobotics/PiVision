@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class EasyTables {
@@ -27,6 +28,7 @@ public class EasyTables {
 
     public void updateDirection(Double drive){
         VISION_DRIVE_VALUE.setDouble(drive);
+        SmartDashboard.putNumber("Vision Angle", drive);
  
     }
 
@@ -37,6 +39,7 @@ public class EasyTables {
 
     public void setNoTargetError(Boolean errorTrue){
         VISION_ERROR_NOTARGET.setBoolean(errorTrue);
+        SmartDashboard.putBoolean("Vision Target Error", errorTrue);
     }
     
 }
